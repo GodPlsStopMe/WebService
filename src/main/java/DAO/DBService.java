@@ -9,12 +9,20 @@ import static java.sql.DriverManager.getConnection;
 
 public class DBService {
     private final Connection connection;
+    private static DBService instance;
 
-    public DBService() {
+    private DBService() {
         this.connection = getH2Connection();
     }
 
-    public void executUpdate(String update) {
+    public static DBService getInstance() {
+        if (instance == null) {
+            instance = new DBService();
+        }
+        return instance;
+    }
+
+    public void executeUpdate(String update) {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(update);

@@ -11,6 +11,11 @@ public class UserData {
         this.password = password;
     }
 
+    public UserData(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
     public String getName(){
         return this.name;
     }

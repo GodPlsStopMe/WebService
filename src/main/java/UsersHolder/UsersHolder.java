@@ -11,7 +11,7 @@ public class UsersHolder {
     private static UsersHolder instance;
 
     private UsersHolder() {
-        users = UsersDAO.reloadUsersFromDB();
+        users = UsersDAO.getInstance().reloadUsersFromDB();
 
     }
 

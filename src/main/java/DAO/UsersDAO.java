@@ -9,9 +9,19 @@ import java.util.ArrayList;
 public class UsersDAO {
     private DBService dbService;
 
-    public UsersDAO(DBService dbService) {
-        this.dbService = dbService;
+    private UsersDAO() {
+        this.dbService = DBService.getInstance();
     }
+
+    private static UsersDAO instance;
+
+    public static UsersDAO getInstance() {
+        if (instance == null) {
+            instance = new UsersDAO();
+        }
+        return instance;
+    }
+
 
     public UserData getUserByLogin(String login) {
         String query = ("select * from users where name=" + login);
@@ -28,7 +38,7 @@ public class UsersDAO {
 
     public void insertUserInDB(UserData userData) {
         String update = ("INSERT INTO USERS VALUES (default, '" + userData.getName() + "','" + userData.getPassword() + "'); ");
-        dbService.executUpdate(update);
+        dbService.executeUpdate(update);
     }
 
     public ArrayList<UserData> reloadUsersFromDB() {
