@@ -1,9 +1,6 @@
 package DAO;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static java.sql.DriverManager.getConnection;
 
@@ -15,8 +12,9 @@ public class DBService {
         this.connection = getH2Connection();
     }
 
-    public static DBService getInstance() {
+    public static DBService getInstance() throws ClassNotFoundException {
         if (instance == null) {
+            Class.forName("org.h2.Driver");
             instance = new DBService();
         }
         return instance;
@@ -33,10 +31,8 @@ public class DBService {
     }
 
     public ResultSet executeQuesry(String query) {
-        try {
-            Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()){
             statement.executeQuery(query);
-            statement.close();
             return statement.getResultSet();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,7 +48,7 @@ public class DBService {
             String name = "tully";
             String pass = "tully";
 
-            return getConnection(url, name, pass);
+            return DriverManager.getConnection(url, name, pass);
 
 
         } catch (SQLException e) {

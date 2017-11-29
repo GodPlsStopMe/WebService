@@ -10,7 +10,11 @@ public class UsersDAO {
     private DBService dbService;
 
     private UsersDAO() {
-        this.dbService = DBService.getInstance();
+        try {
+            this.dbService = DBService.getInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private static UsersDAO instance;
@@ -44,13 +48,20 @@ public class UsersDAO {
     public ArrayList<UserData> reloadUsersFromDB() {
         String query = ("select * from users");
         ResultSet resultSet = dbService.executeQuesry(query);
+        ArrayList<UserData> result = new ArrayList<>();
         UserData userData = null;
         try {
-            userData = new UserData(resultSet.getLong("ID"), resultSet.getString("LOGIN"), resultSet.getString("PASSWORD"));
+            while (resultSet.next()) {
+                userData = new UserData(
+                        resultSet.getLong("ID"),
+                        resultSet.getString("LOGIN"),
+                        resultSet.getString("PASSWORD"));
+                result.add(userData);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
     }
 }
 
